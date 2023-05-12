@@ -24,9 +24,8 @@ def link_canvas_events(self, *canvases):
 
 
 def create_mesh(self, mesh_id="", **kwargs) -> Mesh:
-    if "texture_id" in kwargs:
-        if isinstance(kwargs["texture_id"], Image):
-            kwargs["texture_id"] = kwargs["texture_id"].image_id
+    if "texture_id" in kwargs and isinstance(kwargs["texture_id"], Image):
+        kwargs["texture_id"] = kwargs["texture_id"].image_id
 
     return self.create_mesh_(mesh_id, **kwargs)
 

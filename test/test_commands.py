@@ -294,8 +294,7 @@ def test_primitives(assert_json_equal, asset, color):
     positions = []
     for x in range(5):
         for y in range(5):
-            for z in range(5):
-                positions.append([x, y, z])
+            positions.extend([x, y, z] for z in range(5))
     positions = np.array(positions, np.float32)
     positions = (positions / 2) - 1
     mesh.add_cube(color)

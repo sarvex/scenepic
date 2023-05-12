@@ -63,7 +63,7 @@ def _assert_item_equal(actual, expected):
 
 def _assert_json_equal(actual, expected_path):
     """Assert that the json string provided is equal to the asset."""
-    expected_path = _asset(expected_path + ".json")
+    expected_path = _asset(f"{expected_path}.json")
     with open(expected_path) as file:
         expected = json.load(file)
 

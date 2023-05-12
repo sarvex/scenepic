@@ -197,6 +197,7 @@ def test_images_and_textures(asset):
     mesh1.add_image()
 
     n_frames = 20
+    im_size = 15
     for i in range(n_frames):
         angle = 2 * math.pi * i / n_frames
         cos, sin = math.cos(angle), math.sin(angle)
@@ -210,7 +211,6 @@ def test_images_and_textures(asset):
             sp.Transforms.Translate(focus_point.position),
             sp.Transforms.RotationMatrixFromAxisAngle(axis, angle)))
 
-        im_size = 15
         im_data = np.random.rand(im_size, im_size, 4)
         im_data[:, :, 3] = 0.5 + 0.5 * im_data[:, :, 3]
 
@@ -274,7 +274,7 @@ def test_opacity_and_labels():
         position = 3.0 * np.random.rand(3) - 1.5
         opacity = 1.0 if np.random.randint(2) == 0 else np.random.uniform(0.45, 0.55)
 
-        layer_id = "Layer" + str(i)
+        layer_id = f"Layer{str(i)}"
         mesh = scene.create_mesh(shared_color=color, layer_id=layer_id)
         layer_settings[layer_id] = {"opacity": opacity}
         if geotype == 0:
@@ -290,15 +290,15 @@ def test_opacity_and_labels():
         horizontal_align = ["left", "center", "right"][np.random.randint(3)]
         vertical_align = ["top", "middle", "bottom"][np.random.randint(3)]
         if geotype == 0:
-            if horizontal_align != "center" and vertical_align != "middle":
-                offset_distance = size * 0.7
-            else:
-                offset_distance = size * 0.9
+            offset_distance = (
+                size * 0.7
+                if horizontal_align != "center" and vertical_align != "middle"
+                else size * 0.9
+            )
+        elif horizontal_align != "center" and vertical_align != "middle":
+            offset_distance = size * 0.5 * 0.8
         else:
-            if horizontal_align != "center" and vertical_align != "middle":
-                offset_distance = size * 0.5 * 0.8
-            else:
-                offset_distance = size * 0.6
+            offset_distance = size * 0.6
 
         label = scene.create_label(text=text,
                                    color=color,
@@ -505,7 +505,7 @@ def test_audio_tracks(asset):
         mesh = scene.create_mesh()
         mesh.add_cube(color)
         canvas = scene.create_canvas_3d(name, width=300, height=300)
-        _set_audio(scene, canvas, asset(name + ".ogg"))
+        _set_audio(scene, canvas, asset(f"{name}.ogg"))
         values = []
 
         for j in range(60):
@@ -617,11 +617,13 @@ def test_multiview(asset):
         image.load(path)
         frustums.add_camera_frustum(camera, color)
 
-        image_mesh = scene.create_mesh("image{}".format(i),
-                                       layer_id="images",
-                                       shared_color=sp.Colors.Gray,
-                                       double_sided=True,
-                                       texture_id=image.image_id)
+        image_mesh = scene.create_mesh(
+            f"image{i}",
+            layer_id="images",
+            shared_color=sp.Colors.Gray,
+            double_sided=True,
+            texture_id=image.image_id,
+        )
         image_mesh.add_camera_image(camera)
 
         images.append(image)
@@ -630,7 +632,7 @@ def test_multiview(asset):
     width = 640
     for i, camera in enumerate(cameras):
         height = width / camera.aspect_ratio
-        canvas = scene.create_canvas_3d("hand{}".format(i), width, height, camera=camera)
+        canvas = scene.create_canvas_3d(f"hand{i}", width, height, camera=camera)
         frame = canvas.create_frame()
         frame.add_mesh(cube)
         frame.add_mesh(frustums)

@@ -97,7 +97,7 @@ class CMakeBuild(build_ext):
                                + ", ".join(e.name for e in self.extensions))
 
         if platform.system() == "Windows":
-            cmake_version = LooseVersion(re.search(r"version\s*([\d.]+)", out.decode()).group(1))
+            cmake_version = LooseVersion(re.search(r"version\s*([\d.]+)", out.decode())[1])
             if cmake_version < "3.1.0":
                 raise RuntimeError("CMake >= 3.1.0 is required on Windows")
 
@@ -112,15 +112,17 @@ class CMakeBuild(build_ext):
         """
         cfg = "Debug" if self.debug else "Release"
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
-        cmake_args = ["-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
-                      "-DCMAKE_BUILD_TYPE=" + cfg,
-                      "-DPYTHON_EXECUTABLE=" + sys.executable,
-                      "-DSCENEPIC_BUILD_PYTHON=1"]
+        cmake_args = [
+            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
+            f"-DCMAKE_BUILD_TYPE={cfg}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            "-DSCENEPIC_BUILD_PYTHON=1",
+        ]
 
         build_args = ["--config", cfg, "--target", "_scenepic"]
 
         if platform.system() == "Windows":
-            cmake_args += ["-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir)]
+            cmake_args += [f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{cfg.upper()}={extdir}"]
             if platform.architecture()[0] == "64bit":
                 cmake_args += ["-A", "x64"]
             else:
@@ -128,12 +130,13 @@ class CMakeBuild(build_ext):
 
             build_args += ["--", "/m"]
         else:
-            cmake_args += ["-GUnix Makefiles", "-DCMAKE_BUILD_TYPE=" + cfg]
+            cmake_args += ["-GUnix Makefiles", f"-DCMAKE_BUILD_TYPE={cfg}"]
             build_args += ["--", "-j2"]
 
         env = os.environ.copy()
-        env["CXXFLAGS"] = """{} -DVERSION_INFO="{}" """.format(env.get("CXXFLAGS", ""),
-                                                               self.distribution.get_version())
+        env[
+            "CXXFLAGS"
+        ] = f"""{env.get("CXXFLAGS", "")} -DVERSION_INFO="{self.distribution.get_version()}" """
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
 

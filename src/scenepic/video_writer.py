@@ -85,11 +85,7 @@ class VideoWriter:
             if quality is not None:
                 self._codec_flags.extend(["q", str(quality)])
 
-        if audio_path:
-            self._audio_flags = ["-i", audio_path]
-        else:
-            self._audio_flags = []
-
+        self._audio_flags = ["-i", audio_path] if audio_path else []
         self._framerate = framerate
         self._rgb = rgb
         self._frame_size = frame_size
@@ -105,11 +101,7 @@ class VideoWriter:
     def _to_color(self, color: Tuple[float, float, float]) -> np.array:
         r, g, b = color
         assert 0 <= r <= 1 and 0 <= g <= 1 and 0 <= b <= 1
-        if self._rgb:
-            color = np.array([r, g, b])
-        else:
-            color = np.array([b, g, r])
-
+        color = np.array([r, g, b]) if self._rgb else np.array([b, g, r])
         return (color * 255).astype(np.uint8)
 
     def __enter__(self):

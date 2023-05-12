@@ -95,12 +95,12 @@ def _main():
         # If you have an existing HTML page you want to add a scenepic
         # to, then you can save the scenepic as a self-contained
         # Javascript file.
-        scene.save_as_script("{}.js".format(Name), standalone=True)
+        scene.save_as_script(f"{Name}.js", standalone=True)
     else:
         # However, ScenePic will also create a basic HTML wrapper
         # and embed the Javascript into the file directly so you
         # have a single file containing everything.
-        scene.save_as_html("{}.html".format(Name), title=Title)
+        scene.save_as_html(f"{Name}.html", title=Title)
 
 
 if __name__ == "__main__":

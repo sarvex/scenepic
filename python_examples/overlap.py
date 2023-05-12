@@ -10,7 +10,7 @@ def _create_cubes(scene: sp.Scene, num_cubes: int) -> List[sp.Mesh]:
     meshes = []
     for i in range(num_cubes):
         color = np.random.rand(3)
-        mesh: sp.Mesh = scene.create_mesh(layer_id="cube{}".format(i), shared_color=color)
+        mesh: sp.Mesh = scene.create_mesh(layer_id=f"cube{i}", shared_color=color)
         mesh.add_cube()
         meshes.append(mesh)
 
@@ -33,7 +33,9 @@ def _add_circles(canvas: sp.Canvas2D):
         pos = np.random.rand(2) * 100
         radius = np.random.random() * 10
         color = np.random.rand(3)
-        frame.add_circle(pos[0], pos[1], radius, fill_color=color, layer_id="circle{}".format(i))
+        frame.add_circle(
+            pos[0], pos[1], radius, fill_color=color, layer_id=f"circle{i}"
+        )
 
 
 def _main():
@@ -42,7 +44,7 @@ def _main():
     cubes = _create_cubes(scene, 20)
     for row in range(1, 5):
         for col in range(1, 5):
-            canvasID = "canvas" + str(row) + str(col)
+            canvasID = f"canvas{str(row)}{str(col)}"
             if random.random() < 0.5:
                 canvas = scene.create_canvas_3d(canvasID, 100, 100)
                 _add_objects(canvas, cubes)

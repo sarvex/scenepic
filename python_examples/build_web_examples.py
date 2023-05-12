@@ -45,10 +45,10 @@ def _prep_code(code: str) -> str:
 
 
 def _process_example(example, output_dir: str):
-    script_path = os.path.join(output_dir, "scripts", "{}.js".format(example.Name))
+    script_path = os.path.join(output_dir, "scripts", f"{example.Name}.js")
     scene = example.build_scene()
     scene.save_as_script(script_path, True)
-    html_path = os.path.join(output_dir, "{}.html".format(example.Name))
+    html_path = os.path.join(output_dir, f"{example.Name}.html")
     code = inspect.getsource(example.build_scene)
     code = _prep_code(code)
     html = ExampleTemplate.format(example.Title, example.Name, code)

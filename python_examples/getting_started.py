@@ -47,7 +47,7 @@ def build_scene() -> sp.Scene:
     spheres = []
     for name, color in zip(sphere_names, sphere_colors):
         # by placing each sphere on a different layer, we can toggle them on and off
-        sphere = scene.create_mesh("{}_sphere".format(name), layer_id=name)
+        sphere = scene.create_mesh(f"{name}_sphere", layer_id=name)
         sphere.add_sphere(color=color, transform=sp.Transforms.scale(0.5))
         spheres.append(sphere)
 
@@ -123,14 +123,14 @@ def _main():
         # If you have an existing HTML page you want to add a scenepic
         # to, then you can save the scenepic as a self-contained
         # Javascript file.
-        path = os.path.join(args.output_dir, "{}.js".format(Name))
+        path = os.path.join(args.output_dir, f"{Name}.js")
         scene.save_as_script(path, standalone=True)
     elif args.mode == "debug":
         # Sometimes for debug purposes it is useful to output the
         # webpage as a combination of HTML, script (which is mostly
         # JSON) and library.
-        path = os.path.join(args.output_dir, "{}.html".format(Name))
-        script_path = os.path.join(args.output_dir, "{}.js".format(Name))
+        path = os.path.join(args.output_dir, f"{Name}.html")
+        script_path = os.path.join(args.output_dir, f"{Name}.js")
         library_path = os.path.join(args.output_dir, "scenepic.js")
         scene.save_as_html(path, title=Title,
                            script_path=script_path,
@@ -139,7 +139,7 @@ def _main():
         # Finally, ScenePic can also create a basic HTML wrapper
         # and embed the Javascript into the file directly so you
         # have a single file containing everything.
-        path = os.path.join(args.output_dir, "{}.html".format(Name))
+        path = os.path.join(args.output_dir, f"{Name}.html")
         scene.save_as_html(path, title=Title)
 
 

@@ -29,11 +29,11 @@ class VertexBuffer:
         return str(self._values)
 
     def __getitem__(self, key: str) -> np.ndarray:
-        assert key in self._lookup, "Invalid vertex buffer key " + key
+        assert key in self._lookup, f"Invalid vertex buffer key {key}"
         return self._values[:, self._lookup[key]]
 
     def __setitem__(self, key: str, data: np.ndarray):
-        assert key in self._lookup, "Invalid vertex buffer key " + key
+        assert key in self._lookup, f"Invalid vertex buffer key {key}"
         self._values[:, self._lookup[key]] = data
 
 

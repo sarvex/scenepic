@@ -12,7 +12,7 @@ DOXYGEN = "https://www.doxygen.nl/files/doxygen-1.9.5.windows.x64.bin.zip"
 
 def _download_and_unzip(download_uri, name, output_dir="."):
     ci_dir = os.path.dirname(__file__)
-    zip_path = os.path.join(ci_dir, name + ".zip")
+    zip_path = os.path.join(ci_dir, f"{name}.zip")
 
     if not os.path.exists(zip_path):
         print("Downloading", name, "from", download_uri)
